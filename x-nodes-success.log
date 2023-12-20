@@ -1,0 +1,12 @@
+mloskot@master:~$ k get pods -A -o wide
+NAMESPACE         NAME                               READY   STATUS    RESTARTS      AGE     IP            NODE           NOMINATED NODE   READINESS GATES
+kube-system       calico-node-windows-85sks          2/2     Running   0             6m39s   192.168.0.3   vm-winworker   <none>           <none>
+kube-system       coredns-76f75df574-4jwql           1/1     Running   15 (9h ago)   23h     10.4.0.33     master         <none>           <none>
+kube-system       coredns-76f75df574-96hct           1/1     Running   13 (9h ago)   23h     10.4.0.32     master         <none>           <none>
+kube-system       etcd-master                        1/1     Running   18 (9h ago)   23h     192.168.0.2   master         <none>           <none>
+kube-system       kube-apiserver-master              1/1     Running   19 (9h ago)   23h     192.168.0.2   master         <none>           <none>
+kube-system       kube-controller-manager-master     1/1     Running   20 (9h ago)   23h     192.168.0.2   master         <none>           <none>
+kube-system       kube-proxy-9ptgs                   1/1     Running   18 (9h ago)   23h     192.168.0.2   master         <none>           <none>
+kube-system       kube-proxy-windows-n5b6d           1/1     Running   0             25m     192.168.0.3   vm-winworker   <none>           <none>
+kube-system       kube-scheduler-master              1/1     Running   20 (9h ago)   23h     192.168.0.2   master         <none>           <none>
+tigera-operator   tigera-operator-55585899bf-xvdc4   1/1     Running   15 (9h ago)   23h     192.168.0.2   master         <none>           <none>
