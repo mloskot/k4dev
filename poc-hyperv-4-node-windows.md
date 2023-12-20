@@ -12,7 +12,7 @@ Add-VMScsiController -VMName $vmName
 Add-VMDvdDrive -VMName $vmName -ControllerNumber 1 -ControllerLocation 0 -Path 'D:\_\Software\WindowsServer2022\SERVER_EVAL_x64FRE_en-us.iso'
 Set-VMFirmware -VMName $vmName -FirstBootDevice (Get-VMDvdDrive -VMName $vmName) -EnableSecureBoot Off
 Start-VM -Name $vmName
-vmconnect.exe $env:ComputerName $vmName
+vmconnect.exe $env:ComputerName 'winworker'
 ```
 
 After OS installation unmount ISO:
@@ -92,26 +92,6 @@ PS C:\Users\Administrator> Restart-Computer
 
 ```powershell
 PS C:\Users\Administrator> .\Install-Containerd.ps1 -ContainerDVersion $CONTAINERD_VERSION
-Windows feature 'Containers' is already installed.
-Windows feature 'Hyper-V' is already installed.
-Windows feature 'Hyper-V-PowerShell' is already installed.
-Getting ContainerD binaries
-Downloading https://github.com/containerd/containerd/releases/download/v1.7.11/containerd-1.7.11-windows-amd64.tar.gz to C:\Program Files\containerd\containerd.tar.gz
-x containerd.exe
-x containerd-shim-runhcs-v1.exe
-x ctr.exe
-x containerd-stress.exe
-Registering ContainerD as a service
-Starting ContainerD service
-Downloading https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.27.0/crictl-v1.27.0-windows-amd64.tar.gz to C:\Program Files\containerd\crictl.tar.gz
-x crictl.exe
-
-    Directory: C:\Users\Administrator
-
-Mode                 LastWriteTime         Length Name
-----                 -------------         ------ ----
-d-----        12/20/2023  10:05 AM                .crictl
-Done - please remember to add '--cri-socket "npipe:////./pipe/containerd-containerd"' to your kubeadm join command if your kubernetes version is below 1.25!
 ```
 
 ```powershell
@@ -131,4 +111,31 @@ tar -xzvf nerdctl-$NERDCTL_VERSION-windows-amd64.tar.gz -C "$env:ProgramFiles\co
 $KUBERNETES_VERSION="1.29.0"
 curl.exe -LO https://raw.githubusercontent.com/kubernetes-sigs/sig-windows-tools/master/hostprocess/PrepareNode.ps1
 .\PrepareNode.ps1 -KubernetesVersion $KUBERNETES_VERSION
+```
+
+```powershell
+curl.exe -LO "https://dl.k8s.io/release/v$KUBERNETES_VERSION/bin/windows/amd64/kubectl.exe"
+```
+
+```powershell
+kubeadm join "192.168.0.2:6443" `
+    --token "2wa1qe.x3x1vmhiogpwq73s" `
+    --discovery-token-ca-cert-hash "sha256:7359e7582614596facf7681e5183c0105f8c7431a0d6f6572a8840c86b82d354" `
+    --cri-socket "npipe:////./pipe/containerd-containerd" --v=5
+```
+
+
+On Linux (e.g. master node):
+
+```bash
+ssh Administrator@winworker "mkdir .kube"
+scp .kube/config Administrator@winworker:.kube
+```
+
+```bash
+KUBERNETES_VERSION="1.29.0"
+CALICO_VERSION="3.26.1"  # calico-install and calico-node images are not yet available for 3.27.0
+curl -L https://raw.githubusercontent.com/kubernetes-sigs/sig-windows-tools/master/hostprocess/calico/kube-proxy/kube-proxy.yml | sed "s/KUBE_PROXY_VERSION/v${KUBERNETES_VERSION}/g" | kubectl apply -f -
+curl -L https://raw.githubusercontent.com/kubernetes-sigs/sig-windows-tools/master/hostprocess/calico/calico.yml | sed "s/CALICO_VERSION/$CALICO_VERSION/g" | kubectl apply -f -
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/sig-windows-tools/master/hostprocess/calico/kube-calico-rbac.yml
 ```
