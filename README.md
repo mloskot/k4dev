@@ -12,6 +12,7 @@ Notes for prototyping hybrid cluster on Windows with Hyper-V for Kubernetes SWDT
 - https://github.com/kubernetes-sigs/kubespray/issues/7719
 - https://github.com/kubean-io/kubean/issues/365
 - https://github.com/taliesins/terraform-provider-hyperv/
+- https://github.com/tidalf/terraform-provider-hyperv
 - https://github.com/microsoft/SDN
 - https://github.com/kubernetes/kops
 - https://github.com/Azure/AKS/projects/1
