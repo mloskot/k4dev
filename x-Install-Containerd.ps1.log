@@ -1,0 +1,32 @@
+Windows feature 'Containers' is already installed.
+WARNING: Windows feature 'Hyper-V' is not installed. Installing it now...
+Success Restart Needed Exit Code      Feature Result
+------- -------------- ---------      --------------
+True    Yes            SuccessRest... {Hyper-V}
+WARNING: You must restart this server to finish the installation process.
+WARNING: Windows feature 'Hyper-V-PowerShell' is not installed. Installing it now...
+True    Yes            SuccessRest... {Hyper-V Module for Windows PowerShell, Re...
+WARNING: You must restart this server to finish the installation process.
+Please reboot and re-run this script.
+
+
+Windows feature 'Containers' is already installed.
+Windows feature 'Hyper-V' is already installed.
+Windows feature 'Hyper-V-PowerShell' is already installed.
+Getting ContainerD binaries
+Downloading https://github.com/containerd/containerd/releases/download/v1.7.11/containerd-1.7.11-windows-amd64.tar.gz to C:\Program Files\containerd\containerd.tar.gz
+x containerd.exe
+x containerd-shim-runhcs-v1.exe
+x ctr.exe
+x containerd-stress.exe
+Registering ContainerD as a service
+Starting ContainerD service
+Downloading https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.27.0/crictl-v1.27.0-windows-amd64.tar.gz to C:\Program Files\containerd\crictl.tar.gz
+x crictl.exe
+
+    Directory: C:\Users\Administrator
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        12/20/2023  10:05 AM                .crictl
+Done - please remember to add '--cri-socket "npipe:////./pipe/containerd-containerd"' to your kubeadm join command if your kubernetes version is below 1.25!

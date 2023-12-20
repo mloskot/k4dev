@@ -1,0 +1,139 @@
+Using Kubernetes version: v1.29.0
+
+
+    Directory: C:\
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        12/20/2023  11:02 AM                k
+Downloading https://dl.k8s.io/v1.29.0/bin/windows/amd64/kubelet.exe to C:\k\kubelet.exe
+Downloading https://dl.k8s.io/v1.29.0/bin/windows/amd64/kubeadm.exe to C:\k\kubeadm.exe
+
+
+    Directory: C:\var\log
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        12/20/2023  11:04 AM                kubelet
+
+
+    Directory: C:\var\lib\kubelet\etc
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        12/20/2023  11:04 AM                kubernetes
+
+
+    Directory: C:\etc\kubernetes
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        12/20/2023  11:04 AM                pki
+d-----        12/20/2023  11:04 AM                manifests
+
+
+    Directory: C:\var\lib\kubelet\etc\kubernetes
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----l        12/20/2023  11:04 AM                pki
+Installing nssm
+
+
+    Directory: C:\Program Files
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        12/20/2023  11:04 AM                nssm
+Downloading https://k8stestinfrabinaries.blob.core.windows.net/nssm-mirror/nssm-2.24.zip to nssm.zip
+x nssm.exe
+Registering kubelet service
+Service "kubelet" installed successfully!
+Set parameter "AppStdout" for service "kubelet".
+Set parameter "AppStderr" for service "kubelet".
+Set parameter "AppRotateFiles" for service "kubelet".
+Set parameter "AppRotateOnline" for service "kubelet".
+Set parameter "AppRotateSeconds" for service "kubelet".
+Set parameter "AppRotateBytes" for service "kubelet".
+Set parameter "DependOnService" for service "kubelet".
+
+Caption                       :
+Description                   :
+ElementName                   : kubelet
+InstanceID                    : kubelet
+CommonName                    :
+PolicyKeywords                :
+Enabled                       : True
+PolicyDecisionStrategy        : 2
+PolicyRoles                   :
+ConditionListType             : 3
+CreationClassName             : MSFT|FW|FirewallRule|kubelet
+ExecutionStrategy             : 2
+Mandatory                     :
+PolicyRuleName                :
+Priority                      :
+RuleUsage                     :
+SequencedActions              : 3
+SystemCreationClassName       :
+SystemName                    :
+Action                        : Allow
+Direction                     : Inbound
+DisplayGroup                  :
+DisplayName                   : kubelet
+EdgeTraversalPolicy           : Block
+EnforcementStatus             : NotApplicable
+LocalOnlyMapping              : False
+LooseSourceMapping            : False
+Owner                         :
+Platforms                     : {}
+PolicyStoreSource             : PersistentStore
+PolicyStoreSourceType         : Local
+PrimaryStatus                 : OK
+Profiles                      : 0
+RemoteDynamicKeywordAddresses : {}
+RuleGroup                     :
+Status                        : The rule was parsed successfully from the store. (65536)
+StatusCode                    : 65536
+PSComputerName                :
+Name                          : kubelet
+ID                            : kubelet
+Group                         :
+Profile                       : Any
+Platform                      : {}
+LSM                           : False
+
+Please remember that after you have joined the node to the cluster, that you have to apply the cni daemonset/service and the kube-proxy
+Also remember that for kube-proxy you have to change the its version from the name of the image in the kube-proxy.yml to that of your kubernetes version
+
+In case you use rancher, use the following commands:
+For Windows you can use the following command:
+curl.exe -LO https://raw.githubusercontent.com/kubernetes-sigs/sig-windows-tools/master/kubeadm/kube-proxy/kube-proxy.yml
+(Get-Content "kube-proxy.yml") -Replace 'VERSION', 'v1.29.0' | Set-Content "kube-proxy.yml"
+
+For Linux, you can use the following command:
+curl -LO https://raw.githubusercontent.com/kubernetes-sigs/sig-windows-tools/master/kubeadm/kube-proxy/kube-proxy.yml
+sed -i 's/VERSION/v1.29.0/g' kube-proxy.yml
+
+In case you use flannel, use the following commands:
+For Windows you can use the following command:
+curl.exe -LO https://raw.githubusercontent.com/kubernetes-sigs/sig-windows-tools/master/hostprocess/flannel/kube-proxy/kube-proxy.yml
+(Get-Content "kube-proxy.yml") -Replace 'image: (.*):(.*)-(.*)-(.*)$', 'image: $1:v1.29.0-$3-$4' | Set-Content "kube-proxy.yml"
+
+For Linux, you can use the following command:
+curl -LO https://raw.githubusercontent.com/kubernetes-sigs/sig-windows-tools/master/hostprocess/flannel/kube-proxy/kube-proxy.yml
+sed -i -E 's/image: (.*):(.*)-(.*)-(.*)$/image: \1:v1.29.0-\3-\4/g' kube-proxy.yml
+
+In case you use calico, use the following commands:
+For Windows you can use the following command:
+curl.exe -LO https://raw.githubusercontent.com/kubernetes-sigs/sig-windows-tools/master/hostprocess/calico/kube-proxy/kube-proxy.yml
+(Get-Content "kube-proxy.yml") -Replace 'image: (.*):(.*)-(.*)-(.*)$', 'image: $1:v1.29.0-$3-$4' | Set-Content "kube-proxy.yml"
+
+For Linux, you can use the following command:
+curl -LO https://raw.githubusercontent.com/kubernetes-sigs/sig-windows-tools/master/hostprocess/calico/kube-proxy/kube-proxy.yml
+sed -i -E 's/image: (.*):(.*)-(.*)-(.*)$/image: \1:v1.29.0-\3-\4/g' kube-proxy.yml
