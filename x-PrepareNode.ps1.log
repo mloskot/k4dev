@@ -1,3 +1,9 @@
+PS C:\Users\Administrator> $KUBERNETES_VERSION="1.29.0"
+>> curl.exe -LO https://raw.githubusercontent.com/kubernetes-sigs/sig-windows-tools/master/hostprocess/PrepareNode.ps1
+>> .\PrepareNode.ps1 -KubernetesVersion $KUBERNETES_VERSION
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  7626  100  7626    0     0   8408      0 --:--:-- --:--:-- --:--:--  8407
 Using Kubernetes version: v1.29.0
 
 
@@ -6,7 +12,7 @@ Using Kubernetes version: v1.29.0
 
 Mode                 LastWriteTime         Length Name
 ----                 -------------         ------ ----
-d-----        12/20/2023  11:02 AM                k
+d-----        12/22/2023  12:29 PM                k
 Downloading https://dl.k8s.io/v1.29.0/bin/windows/amd64/kubelet.exe to C:\k\kubelet.exe
 Downloading https://dl.k8s.io/v1.29.0/bin/windows/amd64/kubeadm.exe to C:\k\kubeadm.exe
 
@@ -16,7 +22,7 @@ Downloading https://dl.k8s.io/v1.29.0/bin/windows/amd64/kubeadm.exe to C:\k\kube
 
 Mode                 LastWriteTime         Length Name
 ----                 -------------         ------ ----
-d-----        12/20/2023  11:04 AM                kubelet
+d-----        12/22/2023  12:31 PM                kubelet
 
 
     Directory: C:\var\lib\kubelet\etc
@@ -24,7 +30,7 @@ d-----        12/20/2023  11:04 AM                kubelet
 
 Mode                 LastWriteTime         Length Name
 ----                 -------------         ------ ----
-d-----        12/20/2023  11:04 AM                kubernetes
+d-----        12/22/2023  12:31 PM                kubernetes
 
 
     Directory: C:\etc\kubernetes
@@ -32,8 +38,8 @@ d-----        12/20/2023  11:04 AM                kubernetes
 
 Mode                 LastWriteTime         Length Name
 ----                 -------------         ------ ----
-d-----        12/20/2023  11:04 AM                pki
-d-----        12/20/2023  11:04 AM                manifests
+d-----        12/22/2023  12:31 PM                pki
+d-----        12/22/2023  12:31 PM                manifests
 
 
     Directory: C:\var\lib\kubelet\etc\kubernetes
@@ -41,7 +47,7 @@ d-----        12/20/2023  11:04 AM                manifests
 
 Mode                 LastWriteTime         Length Name
 ----                 -------------         ------ ----
-d----l        12/20/2023  11:04 AM                pki
+d----l        12/22/2023  12:31 PM                pki
 Installing nssm
 
 
@@ -50,7 +56,7 @@ Installing nssm
 
 Mode                 LastWriteTime         Length Name
 ----                 -------------         ------ ----
-d-----        12/20/2023  11:04 AM                nssm
+d-----        12/22/2023  12:31 PM                nssm
 Downloading https://k8stestinfrabinaries.blob.core.windows.net/nssm-mirror/nssm-2.24.zip to nssm.zip
 x nssm.exe
 Registering kubelet service

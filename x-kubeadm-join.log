@@ -1,60 +1,58 @@
 PS C:\Users\Administrator> kubeadm join "192.168.0.2:6443" `
->>     --token "2wa1qe.x3x1vmhiogpwq73s" `
->>     --discovery-token-ca-cert-hash "sha256:7359e7582614596facf7681e5183c0105f8c7431a0d6f6572a8840c86b82d354" `
+>>     --token "927a6j.8coaz3q6v4b1ca60" `
+>>     --discovery-token-ca-cert-hash "sha256:51dba896ee3e805209a805f374f83c2621fdaea5421e9c351d657552c7cdb5f8" `
 >>     --cri-socket "npipe:////./pipe/containerd-containerd" --v=5
-I1220 11:54:41.782934    7048 join.go:413] [preflight] found NodeName empty; using OS hostname as NodeName
+I1222 12:54:09.538585    3892 join.go:413] [preflight] found NodeName empty; using OS hostname as NodeName
 [preflight] Running pre-flight checks
-I1220 11:54:41.782934    7048 preflight.go:93] [preflight] Running general checks
-I1220 11:54:41.792744    7048 checks.go:280] validating the existence of file \etc\kubernetes\kubelet.conf
-I1220 11:54:41.792804    7048 checks.go:280] validating the existence of file \etc\kubernetes\bootstrap-kubelet.conf
-I1220 11:54:41.792804    7048 checks.go:104] validating the container runtime
-I1220 11:54:41.892001    7048 checks.go:516] running all checks
-I1220 11:54:42.336300    7048 checks.go:401] checking whether the given node name is valid and reachable using net.LookupHost
-I1220 11:54:42.347798    7048 checks.go:605] validating kubelet version
-I1220 11:54:42.494567    7048 checks.go:130] validating if the "kubelet" service is enabled and active
-I1220 11:54:42.495168    7048 checks.go:203] validating availability of port 10250
-I1220 11:54:42.495895    7048 checks.go:280] validating the existence of file C:/etc/kubernetes/pki/ca.crt
-I1220 11:54:42.496424    7048 checks.go:430] validating if the connectivity type is via proxy or direct
-I1220 11:54:42.496567    7048 join.go:532] [preflight] Discovering cluster-info
-I1220 11:54:42.496567    7048 token.go:80] [discovery] Created cluster-info discovery client, requesting info from "192.168.0.2:6443"
-I1220 11:54:42.509409    7048 token.go:118] [discovery] Requesting info from "192.168.0.2:6443" again to validate TLS against the pinned public key
-I1220 11:54:42.515803    7048 token.go:135] [discovery] Cluster info signature and contents are valid and TLS certificate validates against pinned roots, will use API Server "192.168.0.2:6443"
-I1220 11:54:42.516319    7048 discovery.go:52] [discovery] Using provided TLSBootstrapToken as authentication credentials for the join process
-I1220 11:54:42.516367    7048 join.go:546] [preflight] Fetching init configuration
-I1220 11:54:42.516367    7048 join.go:592] [preflight] Retrieving KubeConfig objects
+I1222 12:54:09.538585    3892 preflight.go:93] [preflight] Running general checks
+I1222 12:54:09.553040    3892 checks.go:280] validating the existence of file \etc\kubernetes\kubelet.conf
+I1222 12:54:09.553040    3892 checks.go:280] validating the existence of file \etc\kubernetes\bootstrap-kubelet.conf
+I1222 12:54:09.553040    3892 checks.go:104] validating the container runtime
+I1222 12:54:09.692344    3892 checks.go:516] running all checks
+I1222 12:54:11.021787    3892 checks.go:401] checking whether the given node name is valid and reachable using net.LookupHost
+I1222 12:54:11.031208    3892 checks.go:605] validating kubelet version
+I1222 12:54:11.192334    3892 checks.go:130] validating if the "kubelet" service is enabled and active
+I1222 12:54:11.193706    3892 checks.go:203] validating availability of port 10250
+I1222 12:54:11.195915    3892 checks.go:280] validating the existence of file C:/etc/kubernetes/pki/ca.crt
+I1222 12:54:11.196008    3892 checks.go:430] validating if the connectivity type is via proxy or direct
+I1222 12:54:11.196741    3892 join.go:532] [preflight] Discovering cluster-info
+I1222 12:54:11.196810    3892 token.go:80] [discovery] Created cluster-info discovery client, requesting info from "192.168.0.2:6443"
+I1222 12:54:11.209552    3892 token.go:118] [discovery] Requesting info from "192.168.0.2:6443" again to validate TLS against the pinned public key
+I1222 12:54:11.217936    3892 token.go:135] [discovery] Cluster info signature and contents are valid and TLS certificate validates against pinned roots, will use API Server "192.168.0.2:6443"
+I1222 12:54:11.218538    3892 discovery.go:52] [discovery] Using provided TLSBootstrapToken as authentication credentials for the join process
+I1222 12:54:11.218538    3892 join.go:546] [preflight] Fetching init configuration
+I1222 12:54:11.219101    3892 join.go:592] [preflight] Retrieving KubeConfig objects
 [preflight] Reading configuration from the cluster...
 [preflight] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -o yaml'
-I1220 11:54:42.529212    7048 kubeproxy.go:55] attempting to download the KubeProxyConfiguration from ConfigMap "kube-proxy"
-I1220 11:54:42.532519    7048 kubelet.go:74] attempting to download the KubeletConfiguration from ConfigMap "kubelet-config"
-I1220 11:54:42.536229    7048 initconfiguration.go:114] skip CRI socket detection, fill with the default CRI socket npipe:////./pipe/containerd-containerd
-I1220 11:54:42.540801    7048 interface.go:321] Looking for system interface with a global IPv4 address
-I1220 11:54:42.541415    7048 interface.go:209] Interface Ethernet is up
-I1220 11:54:42.542675    7048 interface.go:345] Skipping: no address family match for "fe80::303e:f73c:4d0d:d6d7" on interface "Ethernet".
-I1220 11:54:42.542675    7048 interface.go:353] Found global unicast address "192.168.0.3" on interface "Ethernet".
-W1220 11:54:42.542675    7048 utils.go:69] The recommended value for "authentication.x509.clientCAFile" in "KubeletConfiguration" is: \etc\kubernetes\pki\ca.crt; the provided value is: /etc/kubernetes/pki/ca.crt
-I1220 11:54:42.543759    7048 preflight.go:104] [preflight] Running configuration dependant checks
-I1220 11:54:42.543832    7048 controlplaneprepare.go:225] [download-certs] Skipping certs download
-I1220 11:54:42.543832    7048 kubelet.go:121] [kubelet-start] writing bootstrap kubelet config file at \etc\kubernetes\bootstrap-kubelet.conf
-I1220 11:54:42.543832    7048 kubelet.go:136] [kubelet-start] writing CA certificate at C:/etc/kubernetes/pki/ca.crt
-I1220 11:54:42.548559    7048 kubelet.go:157] [kubelet-start] Checking for an existing Node in the cluster with name "vm-winworker" and status "Ready"
-I1220 11:54:42.555792    7048 kubelet.go:172] [kubelet-start] Stopping the kubelet
-I1220 11:54:42.556304    7048 kubelet_windows.go:43] [componentconfig] Adapting the paths in the KubeletConfiguration for Windows...
-I1220 11:54:42.556373    7048 kubelet_windows.go:51] [componentconfig] Assuming Windows drive "C:"
-I1220 11:54:42.556373    7048 kubelet_windows.go:72] [componentconfig] kubelet/Windows: changing field "resolverConfig" to empty
-I1220 11:54:42.556373    7048 kubelet_windows.go:68] [componentconfig] kubelet/Windows: adapted path for field "staticPodPath" to "C:\\etc\\kubernetes\\manifests"
-I1220 11:54:42.556373    7048 kubelet_windows.go:68] [componentconfig] kubelet/Windows: adapted path for field "authentication.x509.clientCAFile" to "C:\\etc\\kubernetes\\pki\\ca.crt"
+I1222 12:54:11.227994    3892 kubeproxy.go:55] attempting to download the KubeProxyConfiguration from ConfigMap "kube-proxy"
+I1222 12:54:11.232442    3892 kubelet.go:74] attempting to download the KubeletConfiguration from ConfigMap "kubelet-config"
+I1222 12:54:11.237190    3892 initconfiguration.go:114] skip CRI socket detection, fill with the default CRI socket npipe:////./pipe/containerd-containerd
+I1222 12:54:11.240009    3892 interface.go:321] Looking for system interface with a global IPv4 address
+I1222 12:54:11.240009    3892 interface.go:209] Interface Ethernet is up
+I1222 12:54:11.241328    3892 interface.go:345] Skipping: no address family match for "fe80::2172:7711:ae6f:2da7" on interface "Ethernet".
+I1222 12:54:11.241959    3892 interface.go:353] Found global unicast address "192.168.0.4" on interface "Ethernet".
+W1222 12:54:11.242555    3892 utils.go:69] The recommended value for "authentication.x509.clientCAFile" in "KubeletConfiguration" is: \etc\kubernetes\pki\ca.crt; the provided value is: /etc/kubernetes/pki/ca.crt
+I1222 12:54:11.243218    3892 preflight.go:104] [preflight] Running configuration dependant checks
+I1222 12:54:11.243218    3892 controlplaneprepare.go:225] [download-certs] Skipping certs download
+I1222 12:54:11.243811    3892 kubelet.go:121] [kubelet-start] writing bootstrap kubelet config file at \etc\kubernetes\bootstrap-kubelet.conf
+I1222 12:54:11.245666    3892 kubelet.go:136] [kubelet-start] writing CA certificate at C:/etc/kubernetes/pki/ca.crt
+I1222 12:54:11.255419    3892 kubelet.go:157] [kubelet-start] Checking for an existing Node in the cluster with name "winworker" and status "Ready"
+I1222 12:54:11.258587    3892 kubelet.go:172] [kubelet-start] Stopping the kubelet
+I1222 12:54:11.258744    3892 kubelet_windows.go:43] [componentconfig] Adapting the paths in the KubeletConfiguration for Windows...
+I1222 12:54:11.259463    3892 kubelet_windows.go:51] [componentconfig] Assuming Windows drive "C:"
+I1222 12:54:11.260211    3892 kubelet_windows.go:72] [componentconfig] kubelet/Windows: changing field "resolverConfig" to empty
+I1222 12:54:11.260211    3892 kubelet_windows.go:68] [componentconfig] kubelet/Windows: adapted path for field "staticPodPath" to "C:\\etc\\kubernetes\\manifests"
+I1222 12:54:11.261029    3892 kubelet_windows.go:68] [componentconfig] kubelet/Windows: adapted path for field "authentication.x509.clientCAFile" to "C:\\etc\\kubernetes\\pki\\ca.crt"
 [kubelet-start] Writing kubelet configuration to file "\\var\\lib\\kubelet\\config.yaml"
 [kubelet-start] Writing kubelet environment file with flags to file "\\var\\lib\\kubelet\\kubeadm-flags.env"
 [kubelet-start] Starting the kubelet
 [kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap...
-I1220 11:54:44.425410    7048 cert_rotation.go:137] Starting client certificate rotation controller
-I1220 11:54:44.426088    7048 kubelet.go:220] [kubelet-start] preserving the crisocket information for the node
-I1220 11:54:44.426629    7048 patchnode.go:31] [patchnode] Uploading the CRI Socket information "npipe:////./pipe/containerd-containerd" to the Node API object "vm-winworker" as an annotation
+I1222 12:54:13.137182    3892 cert_rotation.go:137] Starting client certificate rotation controller
+I1222 12:54:13.137725    3892 kubelet.go:220] [kubelet-start] preserving the crisocket information for the node
+I1222 12:54:13.138146    3892 patchnode.go:31] [patchnode] Uploading the CRI Socket information "npipe:////./pipe/containerd-containerd" to the Node API object "winworker" as an annotation
 
 This node has joined the cluster:
 * Certificate signing request was sent to apiserver and a response was received.
 * The Kubelet was informed of the new secure connection details.
 
 Run 'kubectl get nodes' on the control-plane to see this node join the cluster.
-
-PS C:\Users\Administrator>

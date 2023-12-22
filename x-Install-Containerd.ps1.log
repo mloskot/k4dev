@@ -1,7 +1,11 @@
-Windows feature 'Containers' is already installed.
-WARNING: Windows feature 'Hyper-V' is not installed. Installing it now...
+.\Install-Containerd.ps1 -ContainerDVersion $CONTAINERD_VERSION
+WARNING: Windows feature 'Containers' is not installed. Installing it now...
+
 Success Restart Needed Exit Code      Feature Result
 ------- -------------- ---------      --------------
+True    Yes            SuccessRest... {Containers}
+WARNING: You must restart this server to finish the installation process.
+WARNING: Windows feature 'Hyper-V' is not installed. Installing it now...
 True    Yes            SuccessRest... {Hyper-V}
 WARNING: You must restart this server to finish the installation process.
 WARNING: Windows feature 'Hyper-V-PowerShell' is not installed. Installing it now...
@@ -9,6 +13,7 @@ True    Yes            SuccessRest... {Hyper-V Module for Windows PowerShell, Re
 WARNING: You must restart this server to finish the installation process.
 Please reboot and re-run this script.
 
+...
 
 Windows feature 'Containers' is already installed.
 Windows feature 'Hyper-V' is already installed.

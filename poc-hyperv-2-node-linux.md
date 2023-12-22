@@ -59,6 +59,10 @@ Get-Content  $env:USERPROFILE\.ssh\id_rsa.pub | ssh mloskot@master "cat >> .ssh/
 ssh mloskot@master
 ```
 
+```bash
+sudo -i bash -c 'echo "mloskot ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers'
+```
+
 Install tools that enable some dedicated features for integrating with hypervisors:
 - https://www.packtpub.com/product/hands-on-kubernetes-on-windows/9781838821562
 
@@ -125,7 +129,8 @@ sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables ne
 
 ```powershell
 Stop-VM -VMName 'vm-master' -Force
-Checkpoint-VM -Name 'vm-master' -SnapshotName 'BaseConfigurationBeforeKubernetes'
+Checkpoint-VM -Name 'vm-master' -SnapshotName 'BaseConfiguration'
+Start-VM -VMName 'vm-master'
 ```
 
 ## Install containerd
@@ -137,14 +142,14 @@ sudo apt install iptables
 ```bash
 CONTAINERD_VERSION=1.7.11
 wget https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}/containerd-${CONTAINERD_VERSION}-linux-amd64.tar.gz
-sudo tar cxzvf /usr/local containerd-${CONTAINERD_VERSION}-linux-amd64.tar.gz
+sudo tar -xzvf containerd-${CONTAINERD_VERSION}-linux-amd64.tar.gz -C /usr/local
 ```
 
 ```bash
 # containerd used for Kubernetes needs to start as cgroup, so configure systemd cgroup driver for runc
-mkdir /etc/containerd
-containerd config default | tee /etc/containerd/config.toml
-sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml  
+sudo mkdir /etc/containerd
+containerd config default | sudo tee /etc/containerd/config.toml
+sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
 # i.e.
 # vim /etc/containerd/config.toml
 # go to [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
@@ -169,21 +174,39 @@ sudo install -m 755 runc.amd64 /usr/local/sbin/runc
 CNI_PLUGINS_VERSION=1.4.0
 sudo wget https://github.com/containernetworking/plugins/releases/download/v${CNI_PLUGINS_VERSION}/cni-plugins-linux-amd64-v${CNI_PLUGINS_VERSION}.tgz
 sudo mkdir -p /opt/cni/bin
-sudo tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v${CNI_PLUGINS_VERSION}.tgz
+sudo tar -xzvf cni-plugins-linux-amd64-v${CNI_PLUGINS_VERSION}.tgz -C /opt/cni/bin
 ```
 
 ```bash
 NERDCTL_VERSION=1.7.2
 wget https://github.com/containerd/nerdctl/releases/download/v${NERDCTL_VERSION}/nerdctl-${NERDCTL_VERSION}-linux-amd64.tar.gz
-sudo tar Cxzvf /usr/local/bin nerdctl-${NERDCTL_VERSION}-linux-amd64.tar.gz
+sudo tar -xzvf nerdctl-${NERDCTL_VERSION}-linux-amd64.tar.gz -C /usr/local/bin 
 ```
+
+```bash
+sudo shutdown now
+```
+
+```powershell
+Stop-VM -VMName 'vm-master' -Force
+Checkpoint-VM -Name 'vm-master' -SnapshotName 'BaseConfigurationWithContainerD'
+Start-VM -VMName 'vm-master'
+```
+
+```bash
+sudo nerdctl run -d --name nginx -p 80:80 nginx:alpine
+sudo nerdctl images
+sudo nerdctl ps
+```
+
+> FIXME: Why if ContainerD 3.26.1 is not tested out with nerdctl as abobe before `kubeadm init` makes kubelet not erady due to `KubeletNotReady              container runtime network not ready: NetworkReady=false reason:NetworkPluginNotReady message:Network plugin returns error: cni plugin not initialized`
 
 ## Install Kubernetes tools
 
 ```bash
-KUBERNETES_VERSION=1.29
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v${KUBERNETES_VERSION}/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v${KUBERNETES_VERSION}/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+KUBERNETES_VERSION_MM=1.29
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v${KUBERNETES_VERSION_MM}/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v${KUBERNETES_VERSION_MM}/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 ```
 
 ```bash
@@ -192,9 +215,12 @@ sudo apt -y install kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
-## Save VM
+```bash
+sudo shutdown now
+```
 
 ```powershell
 Stop-VM -VMName 'vm-master' -Force
-Checkpoint-VM -Name 'vm-master' -SnapshotName 'BaseConfigurationWithKubernetesTools'
+Checkpoint-VM -Name 'vm-master' -SnapshotName 'BaseConfigurationWithKubernetes'
+Start-VM -VMName 'vm-master'
 ```
