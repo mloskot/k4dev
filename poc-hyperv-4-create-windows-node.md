@@ -35,7 +35,6 @@ $credential = New-Object -TypeName System.Management.Automation.PSCredential -Ar
 ```powershell
 Invoke-Command -VMName 'vm-winworker' -Credential $credential -ScriptBlock { `
   Rename-Computer -NewName 'winworker'; `
-  Restart-Computer  -Force; `
 }
 ```
 
@@ -43,7 +42,6 @@ Invoke-Command -VMName 'vm-winworker' -Credential $credential -ScriptBlock { `
 Invoke-Command -VMName 'vm-winworker' -Credential $credential -ScriptBlock { `
     New-NetIPAddress -IPAddress 192.168.0.4 -PrefixLength 24 -InterfaceAlias "Ethernet" -DefaultGateway 192.168.0.1; `
     Set-DnsClientServerAddress -ServerAddresses 1.1.1.1,8.8.8.8 -InterfaceAlias "Ethernet"; `
-    Restart-Computer  -Force; `
 }
 ```
 
@@ -59,7 +57,6 @@ Invoke-Command -VMName 'vm-winworker' -Credential $credential -ScriptBlock { `
 # https://learn.microsoft.com/en-us/windows/security/operating-system-security/network-security/windows-firewall/configure-with-command-line?tabs=powershell
 Invoke-Command -VMName 'vm-winworker' -Credential $credential -ScriptBlock { `
     Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False; `
-    Restart-Computer  -Force; `
 }
 ```
 
@@ -70,25 +67,36 @@ Invoke-Command -VMName 'vm-winworker' -Credential $credential -ScriptBlock { `
     Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0; `
     Set-Service -Name sshd -StartupType 'Automatic'; `
     Start-Service sshd; `
-    Restart-Computer  -Force; `
 }
 ```
 
 ```powershell
 # Fix broken SSH on Windows, https://github.com/PowerShell/Win32-OpenSSH/issues/1942#issuecomment-1868015179
-# TODO: run it from host on VM
-$content = Get-Content -Path $env:ProgramData\ssh\sshd_config;
-$content = $content -replace '.*Match Group administrators.*', '';
-$content = $content -replace '.*AuthorizedKeysFile.*__PROGRAMDATA__.*', '';
-$content = $content -replace 'Match Group administrators', '#Match Group administrators';
-Set-Content -Path $env:ProgramData\ssh\sshd_config -Value $content;
-Start-Service sshd;
+Invoke-Command -VMName 'vm-winworker' -Credential $credential -ScriptBlock { `
+    $content = Get-Content -Path $env:ProgramData\ssh\sshd_config;
+    $content = $content -replace '.*Match Group administrators.*', '';
+    $content = $content -replace '.*AuthorizedKeysFile.*__PROGRAMDATA__.*', '';
+    Set-Content -Path $env:ProgramData\ssh\sshd_config -Value $content;
+}
+```
+
+```powershell
+Invoke-Command -VMName 'vm-winworker' -Credential $credential -ScriptBlock { `
+    Restart-Computer  -Force; `
+}
+```
+
+```powershell
+Stop-VM -VMName 'vm-winworker' -Force;
+Checkpoint-VM -Name 'vm-winworker' -SnapshotName 'BaseInstallationWithNetworkAndSSH';
+Start-VM -VMName 'vm-winworker';
 ```
 
 ```powershell
 # https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_keymanagement#deploying-the-public-key
+ssh-keygen -R winworker
 $publicKey = Get-Content -Path $env:USERPROFILE\.ssh\id_rsa.pub
-$remoteCmd = "powershell New-Item -Force -ItemType Directory -Path $env:ProgramData\ssh; Add-Content -Force -Path $env:ProgramData\ssh\administrators_authorized_keys -Value '$publicKey';icacls.exe ""$env:ProgramData\ssh\administrators_authorized_keys"" /inheritance:r /grant ""Administrators:F"" /grant ""SYSTEM:F"""
+$remoteCmd = "powershell New-Item -Force -ItemType Directory -Path C:\Users\Administrator\.ssh; Add-Content -Force -Path C:\Users\Administrator\.ssh\authorized_keys -Value '$publicKey';icacls.exe ""C:\Users\Administrator\.ssh\authorized_keys "" /inheritance:r /grant ""Administrators:F"" /grant ""SYSTEM:F"""
 ssh Administrator@winworker $remoteCmd
 ```
 
