@@ -24,6 +24,7 @@ After OS installation unmount ISO:
 
 ```powershell
 Set-VMDvdDrive -VMName 'vm-master' -ControllerNumber 1 -ControllerLocation 0 -Path $null
+Restart-VM -Name 'vm-master' -Force
 ```
 
 For the internal vSwitch, network needs to configure manually:
