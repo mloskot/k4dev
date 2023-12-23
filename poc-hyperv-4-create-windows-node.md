@@ -1,6 +1,6 @@
 # Create Windows node
 
-- https://stackoverflow.com/a/77705199/151641
+## Create VM
 
 ```powershell
 $vmName = 'vm-winworker'
@@ -71,7 +71,9 @@ Invoke-Command -VMName 'vm-winworker' -Credential $credential -ScriptBlock { `
 ```
 
 ```powershell
-# Fix broken SSH on Windows, https://github.com/PowerShell/Win32-OpenSSH/issues/1942#issuecomment-1868015179
+# Fix broken SSH on Windows
+# - https://stackoverflow.com/a/77705199/151641
+# - https://github.com/PowerShell/Win32-OpenSSH/issues/1942#issuecomment-1868015179
 Invoke-Command -VMName 'vm-winworker' -Credential $credential -ScriptBlock { `
     $content = Get-Content -Path $env:ProgramData\ssh\sshd_config;
     $content = $content -replace '.*Match Group administrators.*', '';
@@ -84,12 +86,6 @@ Invoke-Command -VMName 'vm-winworker' -Credential $credential -ScriptBlock { `
 Invoke-Command -VMName 'vm-winworker' -Credential $credential -ScriptBlock { `
     Restart-Computer  -Force; `
 }
-```
-
-```powershell
-Stop-VM -VMName 'vm-winworker' -Force;
-Checkpoint-VM -Name 'vm-winworker' -SnapshotName 'BaseInstallationWithNetworkAndSSH';
-Start-VM -VMName 'vm-winworker';
 ```
 
 ```powershell
@@ -106,22 +102,29 @@ Checkpoint-VM -Name 'vm-winworker' -SnapshotName 'BaseInstallationWithNetworkAnd
 Start-VM -VMName 'vm-winworker';
 ```
 
-https://github.com/kubernetes-sigs/sig-windows-tools/blob/master/guides/guide-for-adding-windows-node.md
+## Join node
+
+- https://github.com/kubernetes-sigs/sig-windows-tools/blob/master/guides/guide-for-adding-windows-node.md
+
+```powershell
+ssh Administrator@winworker powershell
+```
 
 ```powershell
 # TODO: For some reason this remote invocation does not work, it gets interrupted at untaring, outputs
-# x containerd.exe
+#   x containerd.exe
 # and terminates
 # Invoke-Command -VMName 'vm-winworker' -Credential $credential -ScriptBlock { `
-#     $CONTAINERD_VERSION="1.7.11"
+#     $CONTAINERD_VERSION="1.7.11";
 #     curl.exe -LO https://raw.githubusercontent.com/kubernetes-sigs/sig-windows-tools/master/hostprocess/Install-Containerd.ps1; `
 #     .\Install-Containerd.ps1 -ContainerDVersion $CONTAINERD_VERSION; `
 # }
-$CONTAINERD_VERSION="1.7.11"
+$CONTAINERD_VERSION="1.7.11";
 curl.exe -LO https://raw.githubusercontent.com/kubernetes-sigs/sig-windows-tools/master/hostprocess/Install-Containerd.ps1;
 .\Install-Containerd.ps1 -ContainerDVersion $CONTAINERD_VERSION;
 # if reboot is required, then re-run the installer script after reboot
-.\Install-Containerd.ps1 -ContainerDVersion $CONTAINERD_VERSION; `
+$CONTAINERD_VERSION="1.7.11";
+.\Install-Containerd.ps1 -ContainerDVersion $CONTAINERD_VERSION;
 ```
 
 ```powershell
@@ -132,15 +135,15 @@ ctr run --rm  mcr.microsoft.com/windows/nanoserver:ltsc2022 test cmd /c echo hel
 
 ```powershell
 # Optional, ctr.exe friendly alternative
-$NERDCTL_VERSION="1.7.2"
-Invoke-WebRequest -Uri https://github.com/containerd/nerdctl/releases/download/v$NERDCTL_VERSION/nerdctl-$NERDCTL_VERSION-windows-amd64.tar.gz -OutFile .\nerdctl-$NERDCTL_VERSION-windows-amd64.tar.gz
-tar -xzvf nerdctl-$NERDCTL_VERSION-windows-amd64.tar.gz -C "$env:ProgramFiles\containerd"
+$NERDCTL_VERSION="1.7.2";
+Invoke-WebRequest -Uri https://github.com/containerd/nerdctl/releases/download/v$NERDCTL_VERSION/nerdctl-$NERDCTL_VERSION-windows-amd64.tar.gz -OutFile .\nerdctl-$NERDCTL_VERSION-windows-amd64.tar.gz;
+tar -xzvf nerdctl-$NERDCTL_VERSION-windows-amd64.tar.gz -C "$env:ProgramFiles\containerd";
 ```
 
 ```powershell
-$KUBERNETES_VERSION="1.29.0"
-curl.exe -LO https://raw.githubusercontent.com/kubernetes-sigs/sig-windows-tools/master/hostprocess/PrepareNode.ps1
-.\PrepareNode.ps1 -KubernetesVersion $KUBERNETES_VERSION
+$KUBERNETES_VERSION="1.29.0";
+curl.exe -LO https://raw.githubusercontent.com/kubernetes-sigs/sig-windows-tools/master/hostprocess/PrepareNode.ps1;
+.\PrepareNode.ps1 -KubernetesVersion $KUBERNETES_VERSION;
 ```
 
 ```powershell
@@ -148,10 +151,9 @@ curl.exe -LO "https://dl.k8s.io/release/v$KUBERNETES_VERSION/bin/windows/amd64/k
 ```
 
 ```powershell
-kubeadm join "192.168.0.2:6443" `
-    --token "927a6j.8coaz3q6v4b1ca60" `
-    --discovery-token-ca-cert-hash "sha256:51dba896ee3e805209a805f374f83c2621fdaea5421e9c351d657552c7cdb5f8" `
-    --cri-socket "npipe:////./pipe/containerd-containerd" --v=5
+kubeadm join 192.168.0.2:6443 `
+    --token hncx9q.2d0btvn9xh6ot6os `
+    --discovery-token-ca-cert-hash sha256:588ebcc05cb86c30fae5b6bf1108b35ffaf9c641a708826dc6ccf0695ddc5849
 ```
 
 On Linux (e.g. master node):
