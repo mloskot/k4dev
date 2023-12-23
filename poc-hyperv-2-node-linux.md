@@ -151,6 +151,7 @@ sudo tar -xzvf containerd-${CONTAINERD_VERSION}-linux-amd64.tar.gz -C /usr/local
 sudo mkdir /etc/containerd
 containerd config default | sudo tee /etc/containerd/config.toml
 sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
+cat /etc/containerd/config.toml | grep SystemdCgroup
 # i.e.
 # vim /etc/containerd/config.toml
 # go to [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
@@ -222,6 +223,6 @@ sudo shutdown now
 
 ```powershell
 Stop-VM -VMName 'vm-master' -Force
-Checkpoint-VM -Name 'vm-master' -SnapshotName 'BaseConfigurationWithKubernetes'
+Checkpoint-VM -Name 'vm-master' -SnapshotName 'BaseConfigurationWithKubernetesBinaries'
 Start-VM -VMName 'vm-master'
 ```
